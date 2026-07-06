@@ -35,4 +35,4 @@ properly working:
    - running **slurmd** on each *comp*
    - the same user (normally called in fantasy excess *slurm*) with
      the same UID
-5. *munge* installed and configured correctly
+5. *munge* installed and configured correctly 
