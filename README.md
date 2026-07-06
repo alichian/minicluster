@@ -15,15 +15,15 @@ To be explicit, in this case the structure is the following:
  +----------+     +-------+     +--------+
                                   |  |  |
                              ------  |  -------
-							 |       |        | 
+                             |       |        | 
                              V       V        V 
-					  +-------+  +-------+ +-------+
-	                  | admin |  | comp1 | | comp2 |
-					  +-------+  +-------+ +-------+
+                      +-------+  +-------+ +-------+
+                      | admin |  | comp1 | | comp2 |
+                      +-------+  +-------+ +-------+
 ```
 The *admin* will be a dedicated server/container.
 
-## Required 
+## Requirements 
 There are some prerequisite necessary to make this minicluster
 properly working:
 1. a working DNS services (this will be provided by docker defaults
@@ -36,3 +36,6 @@ properly working:
    - the same user (normally called in fantasy excess *slurm*) with
      the same UID
 5. *munge* installed and configured correctly 
+
+## Description
+How to this system will be build up il will described in the [detailedDoc.md](./doc/detailedDoc.md).
