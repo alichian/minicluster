@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # The Admin/Management Node
+  slurm-admin:
+    image: debian:slim
+    container_name: slurm-admin
+    hostname: slurm-admin
+    volumes:
+      - shared-data:/shared
+    networks:
+      - slurm-net
+    command: /usr/sbin/slurmctld -D
+
+  # Compute Node 1
+  node-1:
+    image: debian:slim
+    container_name: node-1
+    hostname: node-1
+    volumes:
+      - shared-data:/shared
+    networks:
+      - slurm-net
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+
+  # Compute Node 2
+  node-2:
+    image: debian:slim
+    container_name: node-2
+    hostname: node-2
+    volumes:
+      - shared-data:/shared
+    networks:
+      - slurm-net
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+
+volumes:
+  shared-data: # This defines the shared space accessible by all nodes
+
+networks:
+  slurm-net: # This enables the embedded Docker DNS!
