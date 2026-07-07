@@ -49,7 +49,7 @@ docker run -d \
 For this motivation is it more interesting to have a
 docker-compose.yml that resume all the needs in a declarative manner
 instead to have a long series of entangled scripts.
-The final version of this magic file is [here](./dockerfiles/docker-compose.yml)
+The final version of this magic file is [here](../dockerfiles/docker-compose.yml)
 
 ## Particularity
 There is a not obvious problem. These machines are **not** virtual
