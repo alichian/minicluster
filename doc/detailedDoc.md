@@ -2,11 +2,9 @@
 
 In this project I choose to use a minimal *debian-slim* image. 
 Then there are a list of required packages: 
-1. *ssh*
-2. *pdsh* and its configuration that can be not straightforward (look
-   [here](./doc/pdsh_config.md))
-3. *munge* and the lib used by *slurm* during compilation 
-4. *slurm* and its configuration (look [here](./doc/slurm_config.md))
+1. *ssh* 
+2.  *munge* and the lib used by *slurm* during compilation 
+3.  *slurm* and its configuration (look [here](./doc/slurm_config.md))
 
 ## Communication
 Communication between nodes can be done by the internal bridge network
@@ -31,7 +29,13 @@ This is implemented with:
 ```
 docker volume create shared-data
 ```
-
+## Authentication
+Authentication works at two level: *ssh* and *munge*.
+- *ssh*, with the typical ssh-key shared between all the minicluster
+  machines, provide the authentication to monitoring manually the
+  system;
+- *munge*, it is the default authentication mechanism to 
+ 
 ## Orchestration 
 Even if this is a system with a simple structure, the use of an
 orchestrator it is already necessary. But before to dive in Kubernetes
