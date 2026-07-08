@@ -12,8 +12,10 @@ RUN apt-get install -y slurmctld
 RUN apt-get autoclean && apt-get autoremove
 RUN	rm -rf /var/lib/apt/lists/*
 
-#move the munge key 
+#dirs for the runtimes
+RUN mkdir -p /var/log/sshd /var/log/munge /etc/munge 
 
-EXPOSE 8022
+
+EXPOSE 22 
 
 CMD ["/usr/sbin/slurmctld", "-D" ] 
