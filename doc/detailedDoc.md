@@ -34,7 +34,17 @@ Authentication works at two level: *ssh* and *munge*.
 - *ssh*, with the typical ssh-key shared between all the minicluster
   machines, provide the authentication to monitoring manually the
   system;
-- *munge*, it is the default authentication mechanism to 
+- *munge*, it is the default authentication mechanism to let slurm
+  correctly works
+  
+### ssh-key generation
+To create the ssh-keys we use the usual command :
+```sh-keygen -t ed25519 -f ./shared-data/slurm-rsa -N ""```
+
+### munge-key generation
+To create the munge-key you do not need to have *munge* installed on
+your linux machine. The following command is sufficient:
+```dd if=/dev/urandom bs=1 count=1024 of=./shared-data/munge.key```
  
 ## Orchestration 
 Even if this is a system with a simple structure, the use of an
