@@ -1,4 +1,4 @@
-# minicluster
+# Minicluster
 This is a simple project to play with docker and possibly integrate it
 with other modern cloud tools, such as Kubernetes or Terraform.
 
@@ -23,12 +23,15 @@ To be explicit, in this case the structure is the following:
 ```
 The *admin* will be a dedicated server/container.
 
+(In during developing the login machine will be, for the moment,
+disregarded)
+
 ## Requirements 
 There are some prerequisite necessary to make this minicluster
 properly working:
 1. a working DNS services (this will be provided by docker defaults
    modes)
-2. distributed directory space among *amin* and the *comp*N nodes
+2. a directory shared among *amin* and the *comp*N nodes
 3. some commands propagator like *Kanif* or *pdsh*
 4. *SLURM* installed on each nodes that imply
    - running **slurmctld** on *admin*
