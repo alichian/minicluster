@@ -6,7 +6,7 @@
 #for ssh 
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
-cp -p /tmp/shared-data/slurm-rsa /.ssh/id_rsa
+cp -p /tmp/shared-data/slurm-rsa ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
 
 #for munge

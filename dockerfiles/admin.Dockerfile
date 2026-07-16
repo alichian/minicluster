@@ -4,6 +4,8 @@ FROM debian:bookworm-slim
 # initial update
 RUN apt-get update && apt-get install -y curl 
 
+RUN apt-get install -y openssh-server openssh-client 
+
 RUN apt-get install -y munge
 
 RUN apt-get install -y slurmctld  
