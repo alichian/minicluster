@@ -2,7 +2,7 @@
 FROM debian:bookworm-slim
 
 # initial update
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl 
 
 RUN apt-get install -y munge
 
@@ -13,9 +13,14 @@ RUN apt-get autoclean && apt-get autoremove
 RUN	rm -rf /var/lib/apt/lists/*
 
 #dirs for the runtimes
-RUN mkdir -p /var/log/sshd /var/log/munge /etc/munge 
+#RUN mkdir -p /var/log/sshd
+#RUN mkdir -p /var/log/munge
 
+#exposing the slurmctld typical port
+EXPOSE 6817
 
-EXPOSE 22 
+WORKDIR /app
+ 
+COPY ../dockerfiles/admin.entrypoint.sh .
 
-CMD ["/usr/sbin/slurmctld", "-D" ] 
+ENTRYPOINT [ "/app/admin.entrypoint.sh ",">&", "/app/pippolog" ] 
