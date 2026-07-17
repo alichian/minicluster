@@ -1,7 +1,6 @@
 #!/bin/bash -x
 
-#setup permissions the right permissions they will
-#be in the dockerfile partially and in a some moment
+#setup Chain Authorisation and dirs used by sshd, munge and slurmctld
 
 #for ssh 
 mkdir -p ~/.ssh
