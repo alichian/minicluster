@@ -9,11 +9,16 @@ chmod 700 ~/.ssh
 cp -p /tmp/shared-data/slurm-rsa ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
 
+#for sshd
+mkdir -p /run/sshd
+chmod 0755 /run/sshd
+
 #for munge
-mkdir -p /var/log/munge /var/run/munge /etc/munge
+mkdir -p /var/log/munge /run/munge /etc/munge
 cp -f /tmp/shared-data/munge.key /etc/munge/munge.key
-chown -R munge:munge /var/log/munge /var/run/munge /etc/munge
+chown -R munge:munge /var/log/munge /run/munge /etc/munge
 chmod -R 700 /var/log/munge /var/run/munge
+chmod 0755 /run/munge
 chmod 400 /etc/munge/munge.key
 
 #for slurm

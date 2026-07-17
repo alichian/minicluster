@@ -15,14 +15,16 @@ RUN apt-get autoclean && apt-get autoremove
 RUN	rm -rf /var/lib/apt/lists/*
 
 #dirs for the runtimes
-#RUN mkdir -p /var/log/sshd
-#RUN mkdir -p /var/log/munge
+RUN mkdir -p /var/log/sshd
+RUN mkdir -p /var/log/munge
 
-#exposing the slurmctld typical port
-EXPOSE 6817
+#exposing the slurmctld and the ssh typical port
+EXPOSE 6817 22
 
 WORKDIR /app
  
-COPY ../dockerfiles/admin.entrypoint.sh .
+COPY dockerfiles/admin.entrypoint.sh .
+     
+RUN chmod +x /app/admin.entrypoint.sh 
 
-ENTRYPOINT [ "/app/admin.entrypoint.sh ",">&", "/app/pippolog" ] 
+ENTRYPOINT ["/app/admin.entrypoint.sh"] 
