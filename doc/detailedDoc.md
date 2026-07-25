@@ -96,8 +96,8 @@ with docker. The more natural implementation would use at least
 virtual machines. 
 
 But, despite this considerations, These nodes are **not** virtual
-machines, but just containers that normally run one
-application. However, here it is required that a **sshd** daemon runs in
+machines, but just containers that normally run one application. 
+However, here it is required that a **sshd** daemon runs in
 parallel with **slurmd** (or **slurmctld**) and **munged** daemons.
 In order to have a properly working node. The easiest solution is to
 have a script as **ENTRYPOINT**, that launches two of the overly
@@ -116,3 +116,4 @@ su -s /bin/bash -c "/usr/sbin/munge"
 echo "Starting Slurmd..."
 exec /usr/sbin/slurmd -D
 ```
+
