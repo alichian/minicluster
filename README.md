@@ -10,28 +10,26 @@ using since I begin my thesis (quite few years now).
 
 To be explicit, in this case the structure is the following: 
 ```text
- +----------+     +-------+     +--------+
- | internet |---->| login |---->| switch |
- +----------+     +-------+     +--------+
-                                  |  |  |
-                             ------  |  -------
-                             |       |        | 
-                             V       V        V 
-                      +-------+  +-------+ +-------+
-                      | admin |  | comp1 | | comp2 |
-                      +-------+  +-------+ +-------+
+ +----------+     +--------+
+ | internet |---->| switch |
+ +----------+     +--------+
+                    |  |  |
+               ------  |  -------
+               |       |        | 
+               V       V        V 
+        +-------+  +-------+ +-------+
+        | admin |  | comp1 | | comp2 |
+        +-------+  +-------+ +-------+
 ```
 The *admin* will be a dedicated server/container.
-
-(In during developing the login machine will be, for the moment,
-disregarded)
 
 ## Requirements 
 There are some prerequisite necessary to make this minicluster
 properly working:
-1. a working DNS services (this will be provided by docker defaults
+1. a working DNS services (this will be provided by docker default
    modes)
-2. a directory shared among *amin* and the *comp*N nodes
+2. a directory shared among *amin* and the *comp*N nodes to pass
+   configuration files and calculation data. 
 3. some commands propagator like *Kanif* or *pdsh*
 4. *SLURM* installed on each nodes that imply
    - running **slurmctld** on *admin*
@@ -39,6 +37,12 @@ properly working:
    - the same user (normally called in fantasy excess *slurm*) with
      the same UID
 5. *munge* installed and configured correctly 
+
+Note that using pre-configured images of admin and computational nodes
+that automatically configure themselves, it is not necessary to use
+some *command propagator* like **kanif**or **pdsh**. This become
+obvious during the implementation of this mini-cluster, but, I swear,
+it was not clear during the design phase. 
 
 ## Description
 How to this system will be build up il will described in the [detailedDoc.md](./doc/detailedDoc.md).
