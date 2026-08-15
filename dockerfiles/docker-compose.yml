@@ -3,41 +3,42 @@ version: '3.8'
 services: 
   # The Admin/Management Node
   slurm-admin:
-    image: debian:slim
-    container_name: slurm-admin
-    hostname: slurm-admin
+    image: minicla-node:latest
+    container_name: admin
+    hostname: admin
     volumes:
-      - shared-data:/shared
+      - shared-data:/tmp/shared-data
     networks:
       - slurm-net
-    command: /usr/sbin/slurmctld -D
+    entrypoint: ["/app/admin.entrypoint.sh"]
 
   # Compute Node 1
-  node-1:
-    image: debian:slim
-    container_name: node-1
-    hostname: node-1
+  node001:
+    image: minicla-node:latest
+    container_name: node001
+    hostname: node001
     volumes:
-      - shared-data:/shared
+      - shared-data:/tmp/shared-data
     networks:
       - slurm-net
-    volumes:
-      - ./entrypoint.sh:/entrypoint.sh
-    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+    # volumes:
+    #   - ./entrypoint.sh:/entrypoint.sh
+    entrypoint: ["/app/admin.entrypoint.sh"]
 
   # Compute Node 2
-  node-2:
-    image: debian:slim
-    container_name: node-2
-    hostname: node-2
+  node002:
+    image: minicla-node:latest
+    container_name: node002
+    hostname: node002
     volumes:
-      - shared-data:/shared
+      - shared-data:/tmp/shared-data
     networks:
       - slurm-net
-    volumes:
-      - ./entrypoint.sh:/entrypoint.sh
-    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+    # volumes:
+    #   - ./entrypoint.sh:/entrypoint.sh
+    entrypoint: ["/app/admin.entrypoint.sh"]
 
+    
 volumes:
   shared-data: # This defines the shared space accessible by all nodes
 
