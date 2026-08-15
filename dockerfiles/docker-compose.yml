@@ -3,11 +3,11 @@ version: '3.8'
 services: 
   # The Admin/Management Node
   slurm-admin:
-    image: minicla-node:latest
+    image: minicla-admin:latest
     container_name: admin
     hostname: admin
     volumes:
-      - shared-data:/tmp/shared-data
+      - ./shared-data:/tmp/shared-data
     networks:
       - slurm-net
     entrypoint: ["/app/admin.entrypoint.sh"]
@@ -18,12 +18,12 @@ services:
     container_name: node001
     hostname: node001
     volumes:
-      - shared-data:/tmp/shared-data
+      - ./shared-data:/tmp/shared-data
     networks:
       - slurm-net
     # volumes:
     #   - ./entrypoint.sh:/entrypoint.sh
-    entrypoint: ["/app/admin.entrypoint.sh"]
+    entrypoint: ["/app/node.entrypoint.sh"]
 
   # Compute Node 2
   node002:
@@ -31,16 +31,16 @@ services:
     container_name: node002
     hostname: node002
     volumes:
-      - shared-data:/tmp/shared-data
+      - ./shared-data:/tmp/shared-data
     networks:
       - slurm-net
     # volumes:
     #   - ./entrypoint.sh:/entrypoint.sh
-    entrypoint: ["/app/admin.entrypoint.sh"]
+    entrypoint: ["/app/node.entrypoint.sh"]
 
     
-volumes:
-  shared-data: # This defines the shared space accessible by all nodes
+# volumes:
+#   shared-data: # This defines the shared space accessible by all nodes
 
 networks:
   slurm-net: # This enables the embedded Docker DNS!
