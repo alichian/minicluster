@@ -3,6 +3,9 @@ version: '3.8'
 services: 
   # The Admin/Management Node
   slurm-admin:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/admin.Dockerfile
     image: minicla-admin:latest
     container_name: admin
     hostname: admin
@@ -14,6 +17,9 @@ services:
 
   # Compute Node 1
   node001:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/node.Dockerfile
     image: minicla-node:latest
     container_name: node001
     hostname: node001
@@ -27,6 +33,9 @@ services:
 
   # Compute Node 2
   node002:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/node.Dockerfile
     image: minicla-node:latest
     container_name: node002
     hostname: node002
