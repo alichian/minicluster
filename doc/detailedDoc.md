@@ -3,8 +3,8 @@
 In this project I choose to use a minimal *debian-slim* image. 
 Then there are a list of required packages: 
 1. *ssh* 
-2.  *munge* and the lib used by *slurm* during compilation 
-3.  *slurm* and its configuration (look [here](./doc/slurm_config.md))
+2. *munge* and the lib used by *slurm* during compilation 
+3. *slurm* and its configuration (look [here](./doc/slurm_config.md))
 
 ## Communication
 Communication between nodes can be done by the internal bridge network
