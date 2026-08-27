@@ -1,5 +1,5 @@
 # start
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 # initial update
 RUN apt-get update && apt-get install -y curl 
