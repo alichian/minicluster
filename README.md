@@ -24,7 +24,7 @@ To be explicit, in this case the structure is the following:
 The *admin* will be a dedicated server/container.
 
 ## Requirements 
-There are some prerequisite necessary to make this minicluster
+There are some prerequisite necessary to make a cluster
 properly working:
 1. a working DNS services (this will be provided by docker default
    modes)
