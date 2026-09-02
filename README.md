@@ -45,4 +45,6 @@ obvious during the implementation of this mini-cluster, but, I swear,
 it was not clear during the design phase. 
 
 ## Description
-How to this system will be build up il will described in the [detailedDoc.md](./doc/detailedDoc.md).
+The detailed information on what this minicluster contains can be find
+in the file [detailedDoc.md](./doc/detailedDoc.md). Here it can be
+find also the translation to *Kubernetes*.
