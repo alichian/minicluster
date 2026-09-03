@@ -48,3 +48,5 @@ it was not clear during the design phase.
 The detailed information on what this minicluster contains can be find
 in the file [detailedDoc.md](./doc/detailedDoc.md). Here it can be
 find also the translation to *Kubernetes*.
+The detailed description of the hardware used to develop this project
+and its implication on the used tools is instead in the file [hardware.md](./doc/hardware.md) 

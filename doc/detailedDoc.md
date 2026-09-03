@@ -124,3 +124,4 @@ splitting of the *docker-compose.yml* into :
   * a configuration file of the entire system
   * a service file for each type of services (master and node) 
   * 
+
