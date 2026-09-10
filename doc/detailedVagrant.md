@@ -1,6 +1,10 @@
 # Vagrant configuration
 **Vagrant** is a ready-to-use VMs manager. Under Fedora Linux the
-straightforward provider to use is **libvirt**. Once the machines 
+straightforward provider to use is **libvirt**. Once the machines are
+up it is possible to use them as a substrate to run a *Kubernetes*
+cluster.
+Because the hardware in my specific case is limited, the best choice is
+to use the *k3s* implementation: lighter and adapted to small uses. 
 
 ## Vagrantfile
 After the installation of :
@@ -40,7 +44,7 @@ end
 ```
 Where 
 
-## Planer and Worker configuration
+## *K3s* installation and configuration
 Once connected on the *planer* we have to install the *k3s* flavor of
 **kubernetes** and save certain infos to authorize the communication
 between the three VMs
@@ -92,3 +96,9 @@ then in the *manifesto.yaml* it is necessary just to update the
 eventual "pathHost" with /vagrant. In fact, the nfs-service provide a
 transparent way to share data in the host with the VMs that will run
 the actual pods. 
+
+To be precise is a *nfs-service* is running correctly it is possible
+to avoid use *scp* and simply upload the image puts under the vagrant
+directory: 
+```vagrant ssh <workerX> -c "sudo k3s ctr images import
+/vagrant/test-job.tar"``` 
