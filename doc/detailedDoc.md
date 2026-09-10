@@ -87,7 +87,7 @@ manner instead to have a long series of entangled scripts. Moreover
 this will be useful when a CI/CD pipeline will be applied to this
 project to make it closer to the modern DevOps philosophy. 
 The final version of this magic file is [here](../dockerfiles/docker-compose.yml)
-
+ 
 ## Particularity
 There is an important difference between the typical docker project,
 and this one : the nodes of a cluster have the aspiration to be
@@ -125,3 +125,6 @@ splitting of the *docker-compose.yml* into :
   * a service file for each type of services (master and node) 
   * 
 
+To have some realistic system to play with, the best option is to
+create a virtualize **Kubernetes** cluster. The details on how this
+was configured on my laptop through **vagrant** is [here](detailedVagrant.md).
