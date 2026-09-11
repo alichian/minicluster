@@ -1,0 +1,47 @@
+# this is the Deployment+Service for the slurmctld
+# in this didactical example is good to have them in the same file
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slurm-admin
+  labels:
+    app: slurm-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: slurm-admin
+  template:
+    metadata:
+      labels:
+        app: slurm-admin
+    spec:
+      hostname: admin
+      containers:
+      - name: slurm-admin
+        image: minicla-admin:latest
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: shared-data
+          mountPath: /tmp/shared-data
+      volumes:
+      - name: shared-data
+        hostPath:
+          path: /vagrant/shared-data
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin
+spec:
+  selector:
+    app: slurm-admin
+  ports:
+  - name: slurmctld
+    port: 6817
+    targetPort: 6817
+  - name: ssh
+    port: 22
+    targetPort: 22

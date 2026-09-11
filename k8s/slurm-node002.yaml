@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node002
+  labels:
+    app: node002
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node002
+  template:
+    metadata:
+      labels:
+        app: node002
+    spec:
+      hostname: node002
+      containers:
+      - name: node002
+        image: minicla-node:latest
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: shared-data
+          mountPath: /tmp/shared-data
+      volumes:
+      - name: shared-data
+        hostPath:
+          path: /vagrant/shared-data
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node002
+spec:
+  selector:
+    app: node002
+  ports:
+  - name: slurmd
+    port: 6818
+    targetPort: 6818
+  - name: ssh
+    port: 22
+    targetPort: 22
