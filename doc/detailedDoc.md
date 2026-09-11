@@ -116,15 +116,50 @@ su -s /bin/bash -c "/usr/sbin/munge"
 echo "Starting Slurmd..."
 exec /usr/sbin/slurmd -D
 ```
+How this is implemented in practice in this project can be read in the
+actual entrypoint scripts
+[admin.entrypoint.sh](doc/admin.entrypoint.sh) and [node.entrypoint.sh](doc/node.entrypoint.sh).
 
-## Kubernetes translation
-Once the **docker composer** is correctly set up, it is possible to
-translate this project on **Kubernetes**. The first stage regards the
-splitting of the *docker-compose.yml* into :
-  * a configuration file of the entire system
-  * a service file for each type of services (master and node) 
-  * 
+## Kubernetes migration
+To have some more realistic system to play with, the best option is to
+create a virtualized **Kubernetes** cluster. The details on how this
+was configured on my laptop through **vagrant** is
+[here](detailedVagrant.md). This virtualized node will result very
+interesting when *Flux CD* and some monitoring tools will be
+integrated in the project. 
 
-To have some realistic system to play with, the best option is to
-create a virtualize **Kubernetes** cluster. The details on how this
-was configured on my laptop through **vagrant** is [here](detailedVagrant.md).
+With this said, the migration to *kubernetes* will be accomplished
+following with a stepwise strategy : 
+	1. propose a direct deployment of the admin, node001 and node002
+	   each of them with a defined service;
+	2. shift to a more dynamic structure where the number of
+       calculation nodes can be redefined *on-the-fly*; 
+	   
+### 1. Stemming form docker-compose.yml
+In this first phase, I decided to transpose the
+[docker-compose.yml](../dockerfiles/docker-compose.yml) keeping each
+deployment completely bound to its relative service. For this reason I
+ends up with three yaml files: [slurm-admin.yaml](../k8s/slurm-admin.yaml),
+[slurm-node001.yaml](../k8s/slurm-node001.yaml) and
+[slurm-node002.yaml](../k8s/slurm-node002.yaml). This is of course not
+the best solution, but the best staring point: it is not necessary to
+change nothing in what was already tested and verify when the docker
+compose was prepared.
+It is worth to note that here, diversely to the typical use of pods in
+*Kubernetes*, each service has a defined name that is used then by the
+internal DNS to lets *slurmctld* on the admin find exactly the
+required node. Moreover, these Service *metadata.name* reflect then
+the hostname defined in [slurm.conf](../shared-data/slurm.conf).
+
+### 2. StatefulSet + headless Service
+Now we are ready to shift to a more flexible architecture. In order to
+do this, it necessary to :
+	1. in slurm.conf change the slurm hostnames of a computational
+       node in order to match flexibly the name assigned by
+       *kubernetes*; 
+	2. modify the [node.entrypoint.sh]() to recover the actual
+       ${HOSTNAME};
+	3. shift to the more suitable kind *StatefulSet* and the use of a
+       *headless Service*; 
+	4. pass from the shared-data directory to a [ConfigMap]() file and
+       a [Secret]() file
