@@ -1,26 +1,24 @@
-# this is the Deployment+Service for the slurmctld
-# in this didactical example is good to have them in the same file
-
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: slurm-admin
+  name: slurm-node
   labels:
-    app: slurm-admin
+    app: slurm-node
 spec:
-  replicas: 1
+  serviceName: slurm-node     #thist create the podnames assignement in DNS
+  replicas: 2
   selector:
     matchLabels:
-      app: slurm-admin
+      app: slurm-node
   template:
     metadata:
       labels:
-        app: slurm-admin
+        app: slurm-node
     spec:
-      hostname: admin
+      #hostname: node00X   it is not necessary anymore
       containers:
-      - name: slurm-admin
-        image: minicla-admin:latest
+      - name: slurm-node
+        image: minicla-node:latest
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: shared-data
@@ -33,20 +31,21 @@ spec:
           path: /vagrant/shared-data
           type: Directory
       - name: slurm-conf
-        configMap: 
+        configMap:
           name: slurm-conf
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: admin
+  name: slurm-node
 spec:
+  clusterIP: None       #this make the service headless
   selector:
-    app: slurm-admin
+    app: slurm-node
   ports:
-  - name: slurmctld
-    port: 6817
-    targetPort: 6817
+  - name: slurmd
+    port: 6818
+    targetPort: 6818
   - name: ssh
     port: 22
     targetPort: 22
