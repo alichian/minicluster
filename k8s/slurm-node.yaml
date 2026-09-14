@@ -18,13 +18,13 @@ spec:
       #hostname: node00X   it is not necessary anymore
       containers:
       - name: slurm-node
-        image: minicla-node:latest
+        image: minicla-node-k3s:latest
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: shared-data
           mountPath: /tmp/shared-data
         - name: slurm-conf
-          mountPath: /etc/slurm-configmap
+          mountPath: /etc/slurm-conf
       volumes:
       - name: shared-data
         hostPath:

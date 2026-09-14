@@ -20,13 +20,13 @@ spec:
       hostname: admin
       containers:
       - name: slurm-admin
-        image: minicla-admin:latest
+        image: minicla-admin-k3s:latest
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: shared-data
           mountPath: /tmp/shared-data
         - name: slurm-conf
-          mountPath: /etc/slurm-configmap
+          mountPath: /etc/slurm-conf
       volumes:
       - name: shared-data
         hostPath:
