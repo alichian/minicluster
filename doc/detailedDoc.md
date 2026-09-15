@@ -154,12 +154,22 @@ the hostname defined in [slurm.conf](../shared-data/slurm.conf).
 ### 2. StatefulSet + headless Service
 Now we are ready to shift to a more flexible architecture. In order to
 do this, it necessary to :
-	1. in slurm.conf change the slurm hostnames of a computational
-       node in order to match flexibly the name assigned by
-       *kubernetes*; 
-	2. modify the [node.entrypoint.sh]() to recover the actual
-       ${HOSTNAME};
-	3. shift to the more suitable kind *StatefulSet* and the use of a
-       *headless Service*; 
-	4. pass from the shared-data directory to a [ConfigMap]() file and
-       a [Secret]() file
+
+	1. shift to the more suitable kind *StatefulSet* and the use of a
+       *headless Service*, in this way the cluster is no more
+       restricted to have just two computation nodes, but is now
+       scalable; 
+	2. in slurm.conf change the slurm hostnames of a computational
+       node in order to match the flexibly of the *Statefulset*
+       architecture and, in the same file also, add *NodeAddr* item in
+       the definition of the node ressources (see the new version of
+       [slurm.conf](.k8s/slurm.conf)); 
+	3. modify the [node.entrypoint.sh](./k8s/node.entrypoint.sh) and
+       [admin.entrypoint.sh](./k8s/admin.entrypoint.sh) to recover the
+       actual ${HOSTNAME}; 
+	4. pass from the shared-data directory to a *ConfigMap* for
+       slurm.conf now recasted in the pod manifesto
+       [slurm-conf.yaml](./k8s/slurm-conf.yaml)
+
+
+
