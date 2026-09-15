@@ -1,6 +1,16 @@
 # Minicluster
-This is a simple project to play with docker and possibly integrate it
-with other modern cloud tools, such as Kubernetes or Terraform.
+This project is the transposition of a tiny real-world HPC cluster
+into a fully containerized environment. The cluster architecture has
+the typical structure of a computing cluster for scientific purpose:
+it include a masternode (*admin*), two computational nodes
+(*node001* and *node002*) and a queue managing system (*SLURM*).
+This structure is the backbone of real cluster that I manage daily in my
+professional life in a theoretical chemistry team.
+The initial structure of a pure *Docker* architecture is intended as
+an evolving bench where apply, step by step, a number of modern DevOps
+tools (*Kubernetes*, *Terraform*, *GitOps* and *Grafana/Prometheus*). 
+The actual status of the project evolution can be find in the file
+[status.md](./doc/status.md). 
 
 ## Structure 
 Following the trace of an old magazine, this small cluster has a
@@ -28,7 +38,7 @@ There are some prerequisite necessary to make a cluster
 properly working:
 1. a working DNS services (this will be provided by docker default
    modes)
-2. a directory shared among *amin* and the *comp*N nodes to pass
+2. a directory shared among *admin* and the *comp*N nodes to pass
    configuration files and calculation data. 
 3. some commands propagator like *Kanif* or *pdsh*
 4. *SLURM* installed on each nodes that imply
@@ -39,10 +49,12 @@ properly working:
 5. *munge* installed and configured correctly 
 
 Note that using pre-configured images of admin and computational nodes
-that automatically configure themselves, it is not necessary to use
-some *command propagator* like **kanif**or **pdsh**. This become
-obvious during the implementation of this mini-cluster, but, I swear,
-it was not clear during the design phase. 
+that automatically configure themselves in a containerized way, it is
+not necessary to use some *command propagators* like **kanif**or
+**pdsh**. This become clear during the implementation and it was not
+anticipated during the design phase. In other word the "language of
+containers" allowed an unexpected shortcut when I was rephrasing the
+cluster from the "language of bare-metal".
 
 ## Description
 The detailed information on what this minicluster contains can be find
