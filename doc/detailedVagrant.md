@@ -35,6 +35,7 @@ Vagrant.configure("2") do |config|
     config.vm.define name do |node|
       node.vm.hostname = name
       node.vm.provider :libvirt do |lv|
+		lv.quemu_use_session = true
         lv.memory = spec[:memory]
         lv.cpus = spec[:cpus]
       end
@@ -42,7 +43,14 @@ Vagrant.configure("2") do |config|
   end
 end
 ```
-Where 
+Where the specification of the VMs is given in the *nodes* section and
+for each of them the nested loops activate and prepare the machines as
+declared before. An interesting aspect is given by the
+*qemu_use_session* variable, without whom is quite easy to lose track
+of which modality the emulator qemu is effectively running and then
+eventually mixing the "session" and "system" mode. This can break the
+VMs indentification  and produce running VMs that are actually
+unreachable.
 
 ## *K3s* installation and configuration
 Once connected on the *planer* we have to install the *k3s* flavor of
@@ -68,7 +76,7 @@ curl -sfL https://get.k3s.io | K3S_URL=https://<admin-ip>:6443 \ K3S_TOKEN=<toke
 Now it is time to pull the kubeconfig back to the host so it is possible
 to concretely call *kubectl* from outside, from the host machine 
 ```
-scp admin:/etc/rancher/k3s/k3s.yaml ~/.kube/minicluster.yaml
+vagrant ssh admin -c "sudo cat /etc/rancher/k3s/k3s.yaml" > ~/.kube/minicluster.yaml
 sed -i 's/127.0.0.1/<admin-ip>/' ~/.kube/minicluster.yaml
 export KUBECONFIG="~/.kube/minicluster.yaml"
 kubectl get nodes
