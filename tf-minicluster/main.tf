@@ -7,3 +7,12 @@ terraform {
 	}
   }
 }
+
+# this is needed because is qemu is not explicited
+# sometime libvirt can use the system one expecially if
+# "sudo" is used to start related services
+# (like dnsmasq or nfs-server)
+provider "libvirt" {
+  uri = "qemu:///session"
+}
+
