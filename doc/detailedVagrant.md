@@ -105,8 +105,9 @@ eventual "pathHost" with /vagrant. In fact, the nfs-service provide a
 transparent way to share data in the host with the VMs that will run
 the actual pods. 
 
-To be precise is a *nfs-service* is running correctly it is possible
-to avoid use *scp* and simply upload the image puts under the vagrant
-directory: 
-```vagrant ssh <workerX> -c "sudo k3s ctr images import
-/vagrant/test-job.tar"``` 
+To be precise if a *nfs-service* is running correctly, it is possible
+to completely avoid use *scp* and put under the vagrant directory, the exported image: 
+```
+vagrant ssh <workerX> -c "sudo k3s ctr images import
+/vagrant/test-job.tar"
+``` 
