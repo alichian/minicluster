@@ -16,3 +16,22 @@ provider "libvirt" {
   uri = "qemu:///session"
 }
 
+resource "libvirt_image" "nginx" {
+  name         = "nginx:latest"
+  keep_locally = false
+}
+
+resource "libvirt_container" "nginx" {
+  image = libvirt_image.nginx.image_id
+  name  = var.container_name
+  ports {
+    internal = 80
+    external = 8080
+  }
+}
+
+variable container_name {
+  description = "The simples example use of a variable"
+  type = string
+  default = "nginxCont"
+}
