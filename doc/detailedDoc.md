@@ -118,7 +118,7 @@ exec /usr/sbin/slurmd -D
 ```
 How this is implemented in practice in this project can be read in the
 actual entrypoint scripts
-[admin.entrypoint.sh](doc/admin.entrypoint.sh) and [node.entrypoint.sh](doc/node.entrypoint.sh).
+[admin.entrypoint.sh](../dockerfiles/admin.entrypoint.sh) and [node.entrypoint.sh](../dockerfiles/node.entrypoint.sh).
 
 ## Kubernetes migration
 To have some more realistic system to play with, the best option is to
@@ -172,4 +172,18 @@ do this, it necessary to :
        [slurm-conf.yaml](./k8s/slurm-conf.yaml)
 
 
-
+### Further developpement 
+To go further in the configuration of a dynamical infrastructure that
+can be a useful bench where apply modern tools, is the good moment to
+start the *terraform* version of this same cluster. In a higher level
+it will be easier to build up, start, configure in real time and
+destroy this same *k3s* cluster that up to now was managed by *vagrant*. 
+In fact, there are many hardware problems that can occurs when a
+laptop (an hardware that was not intent to be stable) is used with
+such complex system; one of the most problematic is the
+"miss-alignment" after a long suspension. It can be so complicated
+that the entire "k3s" structure has to be rebuilt from, almost,
+scratch. This is exactly the kind of situation that motivated the
+creation of tools like *terraform*: automatically build and manage an
+infrastructure. Therefore, the natural continuation of this project
+will be described in the specific file [terraform.md](terraform.md).
