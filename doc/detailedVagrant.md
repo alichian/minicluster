@@ -108,6 +108,7 @@ the actual pods.
 To be precise if a *nfs-service* is running correctly, it is possible
 to completely avoid use *scp* and put under the vagrant directory, the exported image: 
 ```
+docker save -o test-job.tar test-job:latest
 vagrant ssh <workerX> -c "sudo k3s ctr images import
 /vagrant/test-job.tar"
 ``` 
