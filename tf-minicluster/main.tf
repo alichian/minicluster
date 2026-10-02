@@ -13,7 +13,7 @@ terraform {
 # "sudo" is used to start related services
 # (like dnsmasq or nfs-server)
 provider "libvirt" {
-  uri = "qemu:///session"
+  uri = "qemu:///session?socket=/run/user/1000/libvirt/virtqemud-sock"
 }
 
 resource "libvirt_domain" "tinyVM" {
@@ -28,11 +28,18 @@ resource "libvirt_domain" "tinyVM" {
 
 resource "libvirt_volume" "tiny-vol" {
   name   = "tiny.qcow2"
-  pool   = "default"
+  pool   = libvirt_pool.test_pool.name
   source = "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2"
   format = "qcow2"
 }
 
+resource "libvirt_pool" "test_pool" {
+  name = "test_pool"
+  type = "dir"
+  target {
+	path = "${pathexpand("~")}/.local/share/libvirt/images/test_pool"
+  }
+}
 
 variable "vm_name" {
   description = "The simples example use of a variable"
