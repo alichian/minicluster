@@ -25,6 +25,12 @@ resource "libvirt_domain" "tinyVM" {
     volume_id = libvirt_volume.tiny-vol.id
   }
 
+  network_interface {
+	hostname = "tinyviemme"
+	bridge = "brg-k8s"
+	wait_for_lease = false 
+  }
+  
   # this to enamble the possibility to connect from virsh
   # remember to add a login and a password to the image
   console {
@@ -54,3 +60,4 @@ variable "vm_name" {
   type        = string
   default     = "tinyvm"
 }
+
