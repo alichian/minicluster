@@ -24,6 +24,14 @@ resource "libvirt_domain" "tinyVM" {
   disk {
     volume_id = libvirt_volume.tiny-vol.id
   }
+
+  # this to enamble the possibility to connect from virsh
+  # remember to add a login and a password to the image
+  console {
+	type = "pty"
+	target_port = "0"
+	target_type = "serial"
+  }
 }
 
 resource "libvirt_volume" "tiny-vol" {
