@@ -38,12 +38,32 @@ resource "libvirt_domain" "tinyVM" {
 	target_port = "0"
 	target_type = "serial"
   }
+
+  # this to add the initialisator disk
+  cloudinit = libvirt_cloudinit_disk.init.id
+}
+
+# this a sort of floppydisk initalizator : is read
+# and executed only once, at the creation
+resource "libvirt_cloudinit_disk" "init" {
+  name      = "tiny-init.iso"
+  pool      = libvirt_pool.test_pool.name
+  # the use of templatefile() and file() is a simple way to
+  # validate clearly the indentation of yaml files 
+  user_data = templatefile("${path.module}/cloud-init/user-data.yaml", {
+	mysshkey = trimspace(file(pathexpand("~/.ssh/id_ed25519.pub")))
+  })
+  meta_data =  file("${path.module}/cloud-init/meta-data.yaml")
 }
 
 resource "libvirt_volume" "tiny-vol" {
   name   = "tiny.qcow2"
   pool   = libvirt_pool.test_pool.name
   source = "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2"
+  # sometime the web source is not directly available so a local variable
+  # can resolve the lack of the source ... comment the first source
+  # and uncomment the following one 
+  # source = "${libvirt_pool.test_pool.path}/debian-13-generic-amd64.qcow2"
   format = "qcow2"
 }
 
