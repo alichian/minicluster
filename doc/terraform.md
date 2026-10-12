@@ -54,5 +54,8 @@ connection an linked it *brg-k8s*
 sudo nmcli connection add type dummy ifname dummy-k8s con-name dummy-k8s master brg-k8s slave-type bridge
 sudo nmcli connection up dummy-k8s
 ```
-Now it will be always available and always the same for the rest of
-the project.
+Now the network will be always available and always the same for the rest of
+the project. 
+In the first instance, I used a terraform to setup just a single
+machine. The next section will provide information about how I replaced
+the single machine with a three node kubernetes cluster. 

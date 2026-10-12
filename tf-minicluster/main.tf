@@ -20,7 +20,9 @@ resource "libvirt_domain" "tinyVM" {
   name   = var.vm_name
   memory = 1024
   vcpu   = 1
-
+  autostart = false
+  running = false
+  
   disk {
     volume_id = libvirt_volume.tiny-vol.id
   }
@@ -28,6 +30,7 @@ resource "libvirt_domain" "tinyVM" {
   network_interface {
 	hostname = "tinyviemme"
 	bridge = "brg-k8s"
+	# indeed with a session qemu provisioning the bridge cannot be managed
 	wait_for_lease = false 
   }
   
