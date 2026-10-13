@@ -16,15 +16,27 @@ provider "libvirt" {
   uri = "qemu:///session?socket=/run/user/1000/libvirt/virtqemud-sock"
 }
 
-resource "libvirt_domain" "tinyVM" {
-  name   = var.vm_name
-  memory = 1024
-  vcpu   = 1
+# this is the map corresponding to one virtual machine
+# it ca be expanded easily 
+locals {
+  machines = {
+	"tinyvm" = {
+	  memory = 1024
+	  vcpu = 1
+	}
+  }
+}
+
+resource "libvirt_domain" "machine" {
+  for_each  = local.machines
+  name   = each.key
+  memory = each.value.memory
+  vcpu   = each.value.vcpu
   autostart = true
   running = true
   
   disk {
-    volume_id = libvirt_volume.tiny-vol.id
+    volume_id = libvirt_volume.machine[each.key].id
   }
 
   network_interface {
@@ -42,14 +54,15 @@ resource "libvirt_domain" "tinyVM" {
 	target_type = "serial"
   }
 
-  # this to add the initialisator disk
-  cloudinit = libvirt_cloudinit_disk.init.id
+  # this is the initialisator disk
+  cloudinit = libvirt_cloudinit_disk.machine-init[each.key].id
 }
 
 # this a sort of floppydisk initalizator : is read
 # and executed only once, at the creation
-resource "libvirt_cloudinit_disk" "init" {
-  name      = "tiny-init.iso"
+resource "libvirt_cloudinit_disk" "machine-init" {
+  for_each  = local.machines
+  name      = "${each.key}.iso"
   pool      = libvirt_pool.test_pool.name
   # the use of templatefile() and file() is a simple way to
   # validate clearly the indentation of yaml files 
@@ -59,12 +72,13 @@ resource "libvirt_cloudinit_disk" "init" {
   meta_data =  file("${path.module}/cloud-init/meta-data.yaml")
 }
 
-resource "libvirt_volume" "tiny-vol" {
-  name           = "tiny.qcow2"
+resource "libvirt_volume" "machine" {
+  for_each       = local.machines
+  name           = "${each.key}.qcow2"
   pool           = libvirt_pool.test_pool.name
   base_volume_id = libvirt_volume.debian-base.id
   size           = 5368709120   # roughtly 5 GB
-  format = "qcow2"
+  format         = "qcow2"
 }
 
 resource "libvirt_volume" "debian-base" {
@@ -82,9 +96,4 @@ resource "libvirt_pool" "test_pool" {
   }
 }
 
-variable "vm_name" {
-  description = "The simples example use of a variable"
-  type        = string
-  default     = "tinyvm"
-}
 
