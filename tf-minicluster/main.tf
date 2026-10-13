@@ -20,8 +20,8 @@ resource "libvirt_domain" "tinyVM" {
   name   = var.vm_name
   memory = 1024
   vcpu   = 1
-  autostart = false
-  running = false
+  autostart = true
+  running = true
   
   disk {
     volume_id = libvirt_volume.tiny-vol.id
@@ -60,13 +60,17 @@ resource "libvirt_cloudinit_disk" "init" {
 }
 
 resource "libvirt_volume" "tiny-vol" {
-  name   = "tiny.qcow2"
+  name           = "tiny.qcow2"
+  pool           = libvirt_pool.test_pool.name
+  base_volume_id = libvirt_volume.debian-base.id
+  size           = 5368709120   # roughtly 5 GB
+  format = "qcow2"
+}
+
+resource "libvirt_volume" "debian-base" {
+  name   = "debian-13.qcow2"
   pool   = libvirt_pool.test_pool.name
   source = "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2"
-  # sometime the web source is not directly available so a local variable
-  # can resolve the lack of the source ... comment the first source
-  # and uncomment the following one 
-  # source = "${libvirt_pool.test_pool.path}/debian-13-generic-amd64.qcow2"
   format = "qcow2"
 }
 
