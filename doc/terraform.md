@@ -104,6 +104,21 @@ I decided to divide the expansion from *tinyVM* to the
 	
 ### 1. Decoupling images and volumes
 
+Two good reasons interconnected justify the idea of detaching the
+image of the *debian linux* from the volume where the system is
+stored. The first is the obvious practical simplicity of using, for
+each of the virtual machine hosting the *k3s* cluster, exactly the
+same OS. The second one, that derive directly from the first, is the
+fact that once established that the image is largely sufficient to
+download just one copy. This consideration could sound trivial, but
+it is worth to mention that the default behaviour of *terraform* is to
+download freshly each time the image of a new domain. The for three
+machines, three download. 
+
+To decoupling images and volumes I simply introduced a volume where
+the effective unique download is done and imposing that the source
+will be this new volume.
+
 ### 2. Introduction of `for-each`
 
 ### 3. Fixing the IP
