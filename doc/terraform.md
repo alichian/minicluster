@@ -9,7 +9,7 @@ choices.
 
 ## Session vs system QEMU
 
-With this in mind I added the following specification in my
+With all this in mind I added the following specification in my
 [main.tf](../tf-minicluster/main.tf):
 ```
 provider "libvirt" {
@@ -36,7 +36,7 @@ providing is the managing of the network:
       has superuser privileges 
 	* Session mode doesn't provide any connection precisely because it
       **does not** have any privileges on networking devices 
-
+.
 So every VM built in session mode, even if is running, it is off
 line. The solution that still guarantee the security is to create a
 specific bridge.
@@ -59,3 +59,57 @@ the project.
 In the first instance, I used a terraform to setup just a single
 machine. The next section will provide information about how I replaced
 the single machine with a three node kubernetes cluster. 
+
+## A simple test case
+To begin with something more concrete the first step is to have a
+terraform script to configure a tiny infrastructure of just one
+machine. This simple machine will be the base for the minicluster
+transposition under terraform managing. The requirement are then
+basic: a debian linux connected to a network bridge and accessible
+from the host. From an oriented object perspective this *tinyVM* is an
+ancestor class from which *planer*, *worker1* and *worker2* will
+inherit their backbone. 
+The structure of *tinyVM* is given in
+[tinyVM.tf](../terraform/tinyVM.tf.txt), where a series of
+particularity that are probably different from the typical features
+found by a *terraform* novice and then they are worth to notice: 
+
+	1. the use of *libvirt* as provider and in *session* mode;
+	2. the use of a volume where the files to initiate a cloud;
+	instance (containing the
+	[user-data.yaml](../tf-minicluster/cloud-init/user-data.yaml), 
+	[network.yaml](../tf-minicluster/cloud-init/network.yaml) and
+	[meta-data.yaml](../tf-minicluster/cloud-init/meta-data.yaml); 
+	3. in the definition of the network interface of the domain, the
+       use of `wait_for_lease = false`;
+	4. the use of a console to connect "directly" through *virsh*
+
+Once verified that it is possible to connect by `ssh` or via `virsh
+console`, I will expand incrementally the *tinyVM* to the
+*tf-minicluster*.
+
+## Incrementally build the terraform-minicluster
+I decided to divide the expansion from *tinyVM* to the
+*tf-minicluster* in the following six steps:
+
+	1. create a copy of the OS image, the nodes images will be just a
+       copy of the only downloaded debian image
+	2. build one copy using `for-each`
+	3. assign a fixed IP via the cloud initalization file
+	`network.yaml` 
+	4. create the three copies marking the differences
+	5. configure the *k3s* cluster using what is already described
+       in [detailedVagrant.md](detailedVagrant.md)
+	6. make actionable from the host 
+	
+### 1. Decoupling images and volumes
+
+### 2. Introduction of `for-each`
+
+### 3. Fixing the IP
+
+### 4. Demultiplication
+
+### 5. Configuration of the *k3s* cluster 
+
+### 6. Visible from the host
