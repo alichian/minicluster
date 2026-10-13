@@ -69,7 +69,8 @@ resource "libvirt_cloudinit_disk" "machine-init" {
   user_data = templatefile("${path.module}/cloud-init/user-data.yaml", {
 	mysshkey = trimspace(file(pathexpand("~/.ssh/id_ed25519.pub")))
   })
-  meta_data =  file("${path.module}/cloud-init/meta-data.yaml")
+  meta_data      = file("${path.module}/cloud-init/meta-data.yaml")
+  network_config = file("${path.module}/cloud-init/network.yaml")
 }
 
 resource "libvirt_volume" "machine" {
