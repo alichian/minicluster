@@ -73,17 +73,15 @@ The structure of *tinyVM* is given in
 [tinyVM.tf](../terraform/tinyVM.tf.txt), where a series of
 particularity that are probably different from the typical features
 found by a *terraform* novice and then they are worth to notice: 
-
-	1. the use of *libvirt* as provider and in *session* mode;
-	2. the use of a volume where the files to initiate a cloud;
-	instance (containing the
-	[user-data.yaml](../tf-minicluster/cloud-init/user-data.yaml), 
-	[network.yaml](../tf-minicluster/cloud-init/network.yaml) and
-	[meta-data.yaml](../tf-minicluster/cloud-init/meta-data.yaml); 
-	3. in the definition of the network interface of the domain, the
-       use of `wait_for_lease = false`;
-	4. the use of a console to connect "directly" through *virsh*
-
+1. the use of *libvirt* as provider and in *session* mode;
+2. the use of a volume where the files to initiate a cloud;
+   instance (containing the
+   [user-data.yaml](../tf-minicluster/cloud-init/user-data.yaml), 
+   [network.yaml](../tf-minicluster/cloud-init/network.yaml) and
+   [meta-data.yaml](../tf-minicluster/cloud-init/meta-data.yaml); 
+3. in the definition of the network interface of the domain, the
+   use of `wait_for_lease = false`;
+4. the use of a console to connect "directly" through *virsh*
 Once verified that it is possible to connect by `ssh` or via `virsh
 console`, I will expand incrementally the *tinyVM* to the
 *tf-minicluster*.
@@ -91,16 +89,16 @@ console`, I will expand incrementally the *tinyVM* to the
 ## Incrementally build the terraform-minicluster
 I decided to divide the expansion from *tinyVM* to the
 *tf-minicluster* in the following six steps:
-
-	1. create a copy of the OS image, the nodes images will be just a
-       copy of the only downloaded debian image
-	2. build one copy using `for-each`
-	3. assign a fixed IP via the cloud initalization file
-	`network.yaml` 
-	4. create the three copies marking the differences
-	5. configure the *k3s* cluster using what is already described
-       in [detailedVagrant.md](detailedVagrant.md)
-	6. make actionable from the host 
+	
+1. create a copy of the OS image, the nodes images will be just a
+   copy of the only downloaded debian image
+2. build one copy using `for-each`
+3. assign a fixed IP via the cloud initalization file
+   `network.yaml` 
+4. create the three copies marking the differences
+5. configure the *k3s* cluster using what is already described
+   in [detailedVagrant.md](detailedVagrant.md)
+6. make actionable from the host 
 	
 ### 1. Decoupling images and volumes
 
@@ -123,12 +121,27 @@ will be this new volume.
 
 At this stage, to prepare the multiple copies of the "staminal"
 virtual machines, we need to introduce a mechanism that allow to
-introduce the small variation between them. 
-
+apply the small variation between them. The construct of choice in
+this case is `for_each` and a `locals` list of group of values, a map,
+a sort of dictionary in the *Python* sense.
 
 ### 3. Fixing the IP
 
-### 4. Demultiplication
+To properly work a *Kubernetes* cluster needs to reach the different
+nodes via the internal network. Then it is necessary that each machine
+had a fixed IP and this can be easily provided by the cloud
+configuration file for the network
+[network.yaml](../tf-minicluster/cloud-init/network.yaml).
+As mentioned earlier in this page, the bridge has to be already
+present and working properly.
+
+### 4. Multiplication and differentiation 
+
+This is the stage where each node receive its role: *planer*, *worker1*
+or *worker2*. Even if it is not yet the moment to install *k3s*, it is
+necessary to assign a unique ip and to install all the pre-required
+packages. The most has been already done in step 3, indeed, after
+adding the `locals` map the rest is nothing new.
 
 ### 5. Configuration of the *k3s* cluster 
 
