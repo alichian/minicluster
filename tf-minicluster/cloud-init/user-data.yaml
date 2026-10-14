@@ -1,5 +1,5 @@
 #cloud-config
-hostname: tinyvm
+hostname: ${myname}
 users:
   - name: debian
     sudo: ALL=(ALL) NOPASSWD:ALL
