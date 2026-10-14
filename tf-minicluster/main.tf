@@ -20,10 +20,10 @@ provider "libvirt" {
 # it ca be expanded easily 
 locals {
   machines = {
-	"tinyvm" = {
-	  memory = 1024
-	  vcpu = 1
-	}
+	#	"tinyvm" = { memory = 1024, vcpu = 1 }
+	"planner" = { ip = "192.168.111.10", memory = 1024, vcpu = 2, source_host = "127.0.0.1" }
+	"worker1" = { ip = "192.168.111.11", memory = 1024, vcpu = 2, source_host = "127.0.0.2" }
+	"worker2" = { ip = "192.168.111.12", memory = 1024, vcpu = 2, source_host = "127.0.0.3" }
   }
 }
 
@@ -32,7 +32,7 @@ resource "libvirt_domain" "machine" {
   name   = each.key
   memory = each.value.memory
   vcpu   = each.value.vcpu
-  autostart = true
+  autostart = false
   running = true
   
   disk {
@@ -49,7 +49,8 @@ resource "libvirt_domain" "machine" {
   # this to enamble the possibility to connect from virsh
   # remember to add a login and a password to the image
   console {
-	type = "pty"
+	source_host = each.value.source_host
+	type        = "pty"
 	target_port = "0"
 	target_type = "serial"
   }
@@ -70,7 +71,9 @@ resource "libvirt_cloudinit_disk" "machine-init" {
 	mysshkey = trimspace(file(pathexpand("~/.ssh/id_ed25519.pub")))
   })
   meta_data      = file("${path.module}/cloud-init/meta-data.yaml")
-  network_config = file("${path.module}/cloud-init/network.yaml")
+  network_config = templatefile("${path.module}/cloud-init/network.yaml", {
+	myaddress = each.value.ip
+  })
 }
 
 resource "libvirt_volume" "machine" {
