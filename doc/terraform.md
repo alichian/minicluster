@@ -121,6 +121,11 @@ will be this new volume.
 
 ### 2. Introduction of `for-each`
 
+At this stage, to prepare the multiple copies of the "staminal"
+virtual machines, we need to introduce a mechanism that allow to
+introduce the small variation between them. 
+
+
 ### 3. Fixing the IP
 
 ### 4. Demultiplication
