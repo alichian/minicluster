@@ -69,6 +69,7 @@ resource "libvirt_cloudinit_disk" "machine-init" {
   # validate clearly the indentation of yaml files 
   user_data = templatefile("${path.module}/cloud-init/user-data.yaml", {
 	mysshkey = trimspace(file(pathexpand("~/.ssh/id_ed25519.pub")))
+	myname   = each.key
   })
   meta_data      = file("${path.module}/cloud-init/meta-data.yaml")
   network_config = templatefile("${path.module}/cloud-init/network.yaml", {
