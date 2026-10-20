@@ -14,3 +14,6 @@ users:
           password: debian
           type: text
     ssh_pwauth: false
+package_upgrade: true
+packages:
+  - curl
