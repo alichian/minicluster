@@ -141,11 +141,10 @@ This is the stage where each node receive its role: *planer*, *worker1*
 or *worker2*. Even if it is not yet the moment to install *k3s*, it is
 necessary to assign a unique ip and to install all the pre-required
 packages. The most has been already done in step 3, indeed, after
-adding the `locals` map the rest is nothing new. This is the moment to
-pave the installation of *k3s* with all the packages necessary to the
-installation like `curl`. The most comfortable way to install
-prerequisites is to specify it in the
-[user-data.yaml](../tf-minicluster/cloud-init/user-data.yaml)
+adding the `locals` map the rest is nothing new. This is also the
+moment to pave the installation of *k3s* with all the packages
+necessary to the installation like `curl`. The most comfortable way to
+install prerequisites is to specify it in the [user-data.yaml](../tf-minicluster/cloud-init/user-data.yaml).
 
 ### 5. Configuration of the *k3s* cluster 
 
