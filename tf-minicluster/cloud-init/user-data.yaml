@@ -17,3 +17,9 @@ users:
 package_upgrade: true
 packages:
   - curl
+runcmd:
+%{ if role == "server" }
+  - [ "sh", "-c", "curl -sfL https://get.k3s.io | K3S_TOKEN=${k3stoken} sh -s - "]
+%{ else }
+  - [ "sh", "-c", "curl -sfL https://get.k3s.io | K3S_URL=https://${planner_IP}:6443 K3S_TOKEN=${k3stoken} sh -s - "]
+%{ endif }

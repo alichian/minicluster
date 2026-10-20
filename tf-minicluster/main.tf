@@ -22,18 +22,21 @@ locals {
   machines = {
 	#	"tinyvm" = { memory = 1024, vcpu = 1 }
 	"planner" = {
+	  role        = "server",
 	  ip          = "192.168.111.10",
 	  memory      = 1024,
 	  vcpu        = 2,
 	  source_host = "127.0.0.1"
 	}
 	"worker1" = {
+	  role        = "agent",
 	  ip          = "192.168.111.11",
 	  memory      = 1024,
 	  vcpu        = 2,
 	  source_host = "127.0.0.2"
 	}
 	"worker2" = {
+	  role        = "agent",
 	  ip          = "192.168.111.12",
 	  memory      = 1024,
 	  vcpu        = 2,
@@ -42,13 +45,18 @@ locals {
   }
 }
 
+resource "random_password" "k3stoken" {
+  length  = 32
+  special = false
+}
+
 resource "libvirt_domain" "machine" {
   for_each  = local.machines
-  name      = each.key
-  memory    = each.value.memory
-  vcpu      = each.value.vcpu
+  name   = each.key
+  memory = each.value.memory
+  vcpu   = each.value.vcpu
   autostart = false
-  running   = true
+  running = true
   
   disk {
     volume_id = libvirt_volume.machine[each.key].id
@@ -56,8 +64,7 @@ resource "libvirt_domain" "machine" {
 
   network_interface {
 	hostname = "tinyviemme"
-	bridge   = "brg-k8s"
-	
+	bridge = "brg-k8s"
 	# indeed with a session qemu provisioning the bridge cannot be managed
 	wait_for_lease = false 
   }
@@ -92,10 +99,14 @@ resource "libvirt_cloudinit_disk" "machine-init" {
   # the use of templatefile() and file() is a simple way to
   # validate clearly the indentation of yaml files 
   user_data = templatefile("${path.module}/cloud-init/user-data.yaml", {
+	mysshkey   = trimspace(file(pathexpand("~/.ssh/id_ed25519.pub")))
 	myname     = each.key
+	role       = each.value.role
+	k3stoken   = random_password.k3stoken.result
+	planner_IP = local.machines["planner"].ip
   })
   
-  meta_data = templatefile("${path.module}/cloud-init/meta-data.yaml", {
+  meta_data      = templatefile("${path.module}/cloud-init/meta-data.yaml", {
 	name = each.key
   })
   

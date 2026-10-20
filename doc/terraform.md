@@ -144,8 +144,49 @@ packages. The most has been already done in step 3, indeed, after
 adding the `locals` map the rest is nothing new. This is also the
 moment to pave the installation of *k3s* with all the packages
 necessary to the installation like `curl`. The most comfortable way to
-install prerequisites is to specify it in the [user-data.yaml](../tf-minicluster/cloud-init/user-data.yaml).
+install prerequisites is to specify them in the
+[user-data.yaml](../tf-minicluster/cloud-init/user-data.yaml) using
+the **package** instance.
 
 ### 5. Configuration of the *k3s* cluster 
+
+This step is the most complex because involves several sub-steps that
+are all well connected each other and they cannot be checked easily
+singularly. In my opinion the best way to describe how step 5 was
+carried out it is to follow a bottom-up approach. 
+Then, considering the instruction followed when I was building the
+*k3s* cluster using [vagrant](detailedvagrant.md), it is evident that
+the difference between the *planner* and a *worker* node resides
+mainly in the command to install the `server` and the `agent`. 
+Indeed, for the former we have: 
+```
+curl -sfL https://get.k3s.io | sh -
+```
+whereas for the later:
+```
+curl -sfL https://get.k3s.io | K3S_URL=https://<admin-ip>:6443 K3S_TOKEN=<key_token> sh -
+```
+this difference can be translated in two different "rendering" of
+[user-data.yaml](../tf-minicluster/cloud-init/user-data.yaml)
+depending on the their assigned "role". 
+In practice, I added a field *role* in the `local.machines` definition
+in the [main.tf](../tf-minicluster/main.tf) and the directive `%{ if }
+/ %{ else } / %{ endif }` in [user-data.yaml](../tf-minicluster/cloud-init/user-data.yaml)
+that results in the following instruction:
+```
+%{ if role == "server" }
+  - [ "sh", "-c", "curl -sfL https://get.k3s.io | K3S_TOKEN=${k3stoken} sh -s - "]
+%{ else }
+  - [ "sh", "-c", "curl -sfL https://get.k3s.io | K3S_URL=https://${planner_IP}:6443 K3S_TOKEN=${k3stoken} sh -s - "]
+%{ endif }
+```
+Now that is introduced, it is possible to explain the last specific
+element in this construct: the `k3stoken`. The *Kubernetes* mechanism
+to authenticate the adding of new nodes is made at the installation.
+Normally the K3S_TOKEN is auto-generated during the *server/planner*
+installation and then used to authenticate the *agent/worker*, as I
+did in [vagrant](detailedvagrant.md), but *terraform* can generate
+it autonomously and have a stronger automatic grasp on the
+infrastructure. This is the motivation at the base of introducing a `k3stoken`. 
 
 ### 6. Visible from the host
