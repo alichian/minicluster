@@ -57,6 +57,14 @@ resource "libvirt_domain" "machine" {
 
   # this is the initialisator disk
   cloudinit = libvirt_cloudinit_disk.machine-init[each.key].id
+
+  # this is to trigger a replacement when the volume changes,
+  # it is added now to build a cascade replacement due
+  # to changes happened in the coud-init disk 
+  lifecycle {
+	replace_triggered_by = [libvirt_volume.machine[each.key]]
+  }
+  
 }
 
 # this a sort of floppydisk initalizator : is read
@@ -84,6 +92,13 @@ resource "libvirt_volume" "machine" {
   base_volume_id = libvirt_volume.debian-base.id
   size           = 5368709120   # roughtly 5 GB
   format         = "qcow2"
+
+  # this is to trigger a replacement when the coud-init disk is
+  # modified
+  lifecycle {
+	replace_triggered_by = [libvirt_cloudinit_disk.machine-init[each.key]]
+  }
+
 }
 
 resource "libvirt_volume" "debian-base" {
