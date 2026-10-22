@@ -20,4 +20,5 @@ multiple node, but it seems not able to correctly mount host volumes.
 For these reasons, the best alternative is probably to use a different
 approach, leveraging the qualities of the laptop used for this
 project: *k3s* on few VMs. Fedora has a native mechanism that is known
-as *libvirt*.
+as *libvirt*, a rich provider that can be managed *ad hoc* via
+[valgrind](detailedVagrant.md) or, better, in a programmatically way using [terraform](terraform.md). 
