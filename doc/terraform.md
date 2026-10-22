@@ -185,8 +185,17 @@ element in this construct: the `k3stoken`. The *Kubernetes* mechanism
 to authenticate the adding of new nodes is made at the installation.
 Normally the K3S_TOKEN is auto-generated during the *server/planner*
 installation and then used to authenticate the *agent/worker*, as I
-did in [vagrant](detailedvagrant.md), but *terraform* can generate
+did in [vagrant](detailedVagrant.md), but *terraform* can generate
 it autonomously and have a stronger automatic grasp on the
-infrastructure. This is the motivation at the base of introducing a `k3stoken`. 
+infrastructure. This is the main motivation to introduce a `k3stoken`
+produced by *terraform*.
 
 ### 6. Visible from the host
+
+Once the *k3s* cluster is running it is possible, as in the case of
+the installation on [vagrant](detailedVagrant.md), it is simple to
+have access to the cluster via the API from the host machine.  It is
+sufficient to recover the file `/etc/rancher/k3s/k3s.yaml` and, once
+the IP is correctly set, to build the environment variable
+`KUBECONFIG`.
+
