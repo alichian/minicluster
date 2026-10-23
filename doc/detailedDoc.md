@@ -161,13 +161,13 @@ do this, it necessary to :
    node in order to match the flexibly of the *Statefulset*
    architecture and, in the same file also, add *NodeAddr* item in
    the definition of the node ressources (see the new version of
-   [slurm.conf](.k8s/slurm.conf));
-3. modify the [node.entrypoint.sh](./k8s/node.entrypoint.sh) and
-   [admin.entrypoint.sh](./k8s/admin.entrypoint.sh) to recover the
+   [slurm.conf](../k8s/slurm.conf));
+3. modify the [node.entrypoint.sh](../k8s/node.entrypoint.sh) and
+   [admin.entrypoint.sh](..k8s/admin.entrypoint.sh) to recover the
    actual ${HOSTNAME};
 4. pass from the shared-data directory to a *ConfigMap* for
    slurm.conf now recasted in the pod manifesto
-   [slurm-conf.yaml](./k8s/slurm-conf.yaml)
+   [slurm-conf.yaml](../k8s/slurm-conf.yaml)
 
 ### Further developpement 
 To go further in the configuration of a dynamical infrastructure that
