@@ -199,3 +199,25 @@ sufficient to recover the file `/etc/rancher/k3s/k3s.yaml` and, once
 the IP is correctly set, to build the environment variable
 `KUBECONFIG`.
 
+## Setup of the SLURM services
+
+Now that the *k3s* cluster is ready and active it is the time to
+start the services admin-slurm and nodes-slurm as it is done before
+with *vagrant*. With this aim we can look to the "manifestos" and
+translated them in this new context where the shared directory is
+managed differently. 
+
+### First manual step
+Initially the operations will be done manually, and only in a
+subsequent time, after a validation, will be made automatic. 
+The first operation is to provide to the *k3s* workers registry the containers images to run the slurm-admin and the slurm-node services: 
+
+```
+docker save -o minicla-admin.tar minicla-admin-k3s:latest
+docker save -o minicla-node.tar minicla-node-k3s:latest
+scp -i ~/.ssh/id_ed25519 minicla-admin.tar minicla-node.tar  debian@<worker-ip>:/tmp
+ssh -i ~/.ssh/id_ed25519 -c "sudo k3s ctr images import /tmp/minicla-admin.tar"
+ssh -i ~/.ssh/id_ed25519 -c "sudo k3s ctr images import /tmp/minicla-node.tar"
+```
+
+
