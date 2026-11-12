@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: slurm-node
+  labels:
+    app: slurm-node
+spec:
+  serviceName: slurm-node     #thist create the podnames assignement in DNS
+  replicas: 2
+  selector:
+    matchLabels:
+      app: slurm-node
+  template:
+    metadata:
+      labels:
+        app: slurm-node
+    spec:
+      #hostname: node00X   it is not necessary anymore
+      containers:
+      - name: slurm-node
+        image: minicla-node-k3s:latest
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: shared-data
+          mountPath: /tmp/shared-data
+        - name: slurm-conf
+          mountPath: /etc/slurm-conf
+      volumes:
+      - name: shared-data
+        hostPath:
+          path: /tmp/shared-data
+          type: Directory
+      - name: slurm-conf
+        configMap:
+          name: slurm-conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: slurm-node
+spec:
+  clusterIP: None       #this make the service headless
+  selector:
+    app: slurm-node
+  ports:
+  - name: slurmd
+    port: 6818
+    targetPort: 6818
+  - name: ssh
+    port: 22
+    targetPort: 22
