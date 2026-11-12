@@ -24,7 +24,7 @@ locals {
 	"planner" = {
 	  role        = "server",
 	  ip          = "192.168.111.10",
-	  memory      = 1024,
+	  memory      = 2048,
 	  vcpu        = 2,
 	  source_host = "127.0.0.1"
 	}
