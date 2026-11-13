@@ -82,6 +82,15 @@ export KUBECONFIG="~/.kube/minicluster.yaml"
 kubectl get nodes
 ```
 Now a *kubernetes* cluster should be visible : the control-plane *planer* and two workers.
+Something comparable to this : 
+
+```
+$ kubectl get nodes
+NAME      STATUS   ROLES           AGE   VERSION
+planner   Ready    control-plane    2d   v1.36.5+k3s1
+worker1   Ready    <none>           2d   v1.36.5+k3s1
+worker2   Ready    <none>           2d   v1.36.5+k3s1
+```
 
 ## Test a simple docker container
 In order to test the right setup of *k3s* it is a good thing to run a
@@ -90,25 +99,26 @@ needs to mount a host directory in order to accomplish its job.
 First of all, the image of the container has to be "exported" and
 delivered and then "imported" on each worker:
 ```
-docker save -o test-job.tar test-job:latest
-scp -i ~/.ssh/id_ed25519 test-job.tar vagrant@<worker1-ip>:/tmp/
-vagrant ssh <workerX> -c "sudo k3s ctr images import /tmp/test-job.tar"
-```
-Then prepare a host directory that will be mounted on the pod on one
-of the two worker
-```
-mkdir -p /path/to/vagrant-project/test-job-data
-cp /path/to/data/*  /path/to/vagrant-project/test-job-data
-```
-then in the *manifesto.yaml* it is necessary just to update the
-eventual "pathHost" with /vagrant. In fact, the nfs-service provide a
-transparent way to share data in the host with the VMs that will run
-the actual pods. 
-
-To be precise if a *nfs-service* is running correctly, it is possible
-to completely avoid use *scp* and put under the vagrant directory, the exported image: 
-```
-docker save -o test-job.tar test-job:latest
-vagrant ssh <workerX> -c "sudo k3s ctr images import
-/vagrant/test-job.tar"
+docker save -o test-job.tar test-job:latest 
+scp -i ~/.ssh/id_ed25519 test-job.tar vagrant@<worker1-ip>:/tmp/ 
+vagrant ssh <workerX> -c "sudo k3s ctr images import /tmp/test-job.tar" 
 ``` 
+Then prepare a host directory that will be mounted on the pod on one 
+of the two worker 
+``` 
+mkdir -p /path/to/vagrant-project/test-job-data 
+cp /path/to/data/*  /path/to/vagrant-project/test-job-data 
+``` 
+then in the *manifesto.yaml* it is necessary just to update the 
+eventual "pathHost" with /vagrant. In fact, the nfs-service provide a 
+transparent way to share data in the host with the VMs that will run 
+the actual pods.
+
+To be precise if a *nfs-service* is running correctly, it is possible 
+to completely avoid use *scp* and put under the vagrant directory, the exported image:
+``` 
+docker save -o test-job.tar test-job:latest 
+vagrant ssh <workerX> -c "sudo k3s ctr images import /vagrant/test-job.tar" 
+``` 
+
+Then it is possible 
