@@ -28,7 +28,7 @@ resource "terraform_data" "prepare_vm" {
 
   # tarballs -> k3s containerd
   provisioner "file" {
-    source      = "${path.module}/../vagrant/"
+    source      = "${path.module}/shared-data"
     destination = "/tmp"
   }
   provisioner "remote-exec" {

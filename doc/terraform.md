@@ -211,13 +211,18 @@ managed differently.
 Initially the operations will be done manually, and only in a
 subsequent time, after a validation, will be made automatic. 
 The first operation is to provide to the *k3s* workers registry the containers images to run the slurm-admin and the slurm-node services: 
-
 ```
 docker save -o minicla-admin.tar minicla-admin-k3s:latest
 docker save -o minicla-node.tar minicla-node-k3s:latest
 scp -i ~/.ssh/id_ed25519 minicla-admin.tar minicla-node.tar  debian@<worker-ip>:/tmp
 ssh -i ~/.ssh/id_ed25519 -c "sudo k3s ctr images import /tmp/minicla-admin.tar"
 ssh -i ~/.ssh/id_ed25519 -c "sudo k3s ctr images import /tmp/minicla-node.tar"
+```
+To verify the state of the registers it is possible to use the
+following command :
+
+```
+$ ssh -i ~/.ssh/id_ed25519 debian@<worker-ip> sudo k3s ctr -n k8s.io images list -q
 ```
 
 
