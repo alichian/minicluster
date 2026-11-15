@@ -22,13 +22,13 @@ spec:
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: shared-data
-          mountPath: /tmp/shared-data
+          mountPath: /var/tmp/shared-data
         - name: slurm-conf
           mountPath: /etc/slurm-conf
       volumes:
       - name: shared-data
         hostPath:
-          path: /tmp/shared-data
+          path: /var/tmp/shared-data
           type: Directory
       - name: slurm-conf
         configMap:

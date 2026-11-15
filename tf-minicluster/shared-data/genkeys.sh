@@ -9,5 +9,5 @@ ssh-keygen -t ed25519 -f ./slurm-rsa -N ""
 dd if=/dev/urandom bs=1 count=1024 of=./munge.key
 
 ## protect them
-chmod 400 slurm-rsa munge.key
+#chmod 400 slurm-rsa munge.key
 

@@ -20,20 +20,29 @@ resource "terraform_data" "prepare_vm" {
 	agent       = true
   }
 
-  # copying from the host to the /tmp/shared-data
+  provisioner "remote-exec" {
+	inline = [
+	  "sudo rm -rf /tmp/shared-data"
+	]
+  }
+  
+  # copying from the host to the /var/tmp/shared-data the configuration files
+  # used by the entrypoint scripts (we need to change them)
   provisioner "file" {
     source      = "${path.module}/shared-data"
-    destination = "/tmp"
+    destination = "/var/tmp"
   }
 
-  # tarballs -> k3s containerd
+  # coping the images to the VMs
   provisioner "file" {
-    source      = "${path.module}/shared-data"
-    destination = "/tmp"
+	source      = "${path.module}/images"
+	destination = "/var/tmp"
   }
+  
+  # uploading the images  in the 
   provisioner "remote-exec" {
     inline = [
-      "for t in /tmp/minicla-*.tar; do sudo k3s ctr images import $t; done",
+      "for t in /var/tmp/images/minicla-*.tar; do sudo k3s ctr images import $t; done"
     ]
   }
 
