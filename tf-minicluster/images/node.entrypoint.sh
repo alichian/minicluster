@@ -24,7 +24,7 @@ chmod 400 /etc/munge/munge.key
 mkdir -p /var/spool/slurmd
 chown -R slurm:slurm /var/spool/slurmd
 chmod 755 /var/spool/slurmd
-cp -p /var/tmp/shared-data/slurm.conf   /etc/slurm/slurm.conf
+cp -p /var/tmp/slurm-conf/slurm.conf    /etc/slurm/slurm.conf
 cp    /var/tmp/shared-data/cgroup.conf  /etc/slurm/cgroup.conf
 chown slurm:slurm /etc/slurm/slurm.conf /etc/slurm/cgroup.conf
 

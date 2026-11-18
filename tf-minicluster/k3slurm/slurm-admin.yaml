@@ -1,6 +1,5 @@
-# this is the Deployment+Service for the slurmctld
+# this is the Deployment+Service for the slurmctld 
 # in this didactical example is good to have them in the same file
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,7 +25,7 @@ spec:
         - name: shared-data
           mountPath: /var/tmp/shared-data
         - name: slurm-conf
-          mountPath: /etc/slurm-conf
+          mountPath: /var/tmp/slurm-conf
       volumes:
       - name: shared-data
         hostPath:
